@@ -1,0 +1,42 @@
+__  __  __
+\ \ \ \ \/
+ \ \/\ \
+  \/  \/
+
+The humans.txt file explains the team, technology,
+and graphic assets behind this site humanstxt.org.
+
+_______________________________________________________________________________
+
+
+DESIGNER | Designer
+
+Christian Bale
+Hand crafted design & web development
+
+Design tools:
+Figma
+Photoshop
+Blender
+
+twitter.com/Christianmw
+github.com/Christianmw
+
+_______________________________________________________________________________
+
+
+TECHNOLOGY | Technology
+
+React
+Remix
+Three.js
+Framer Motion
+
+_______________________________________________________________________________
+
+ 
+FONTS | Fonts
+
+Gotham
+IPA Gothic Regular
+Hiragino Kaku Gothic W8
