@@ -6,12 +6,16 @@ export const navLinks = [
     pathname: '/#project-1',
   },
   {
-    label: 'Details',
-    pathname: '/#details',
+    label: 'Skills',
+    pathname: '/#skills',
   },
   {
-    label: 'Articles',
-    pathname: '/articles',
+    label: 'Certificates',
+    pathname: '/certificates',
+  },
+  {
+    label: 'Details',
+    pathname: '/#details',
   },
   {
     label: 'Contact',
@@ -21,18 +25,23 @@ export const navLinks = [
 
 export const socialLinks = [
   {
-    label: 'Bluesky',
-    url: `https://bsky.app/profile/${config.bluesky}`,
-    icon: 'bluesky',
-  },
-  {
-    label: 'Figma',
-    url: `https://www.figma.com/${config.figma}`,
-    icon: 'figma',
-  },
-  {
-    label: 'Github',
+    label: 'GitHub',
     url: `https://github.com/${config.github}`,
     icon: 'github',
+  },
+  {
+    label: 'LinkedIn',
+    url: `https://www.linkedin.com/in/${config.linkedin}/`,
+    icon: 'linkedin',
+  },
+  {
+    label: 'X',
+    url: `https://x.com/${config.x}`,
+    icon: 'x',
+  },
+  {
+    label: 'Instagram',
+    url: `https://www.instagram.com/${config.instagram}/`,
+    icon: 'instagram',
   },
 ];

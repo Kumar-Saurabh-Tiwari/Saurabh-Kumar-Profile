@@ -1,20 +1,13 @@
-import gamestackTexture2Large from '~/assets/gamestack-list-large.jpg';
-import gamestackTexture2Placeholder from '~/assets/gamestack-list-placeholder.jpg';
-import gamestackTexture2 from '~/assets/gamestack-list.jpg';
-import gamestackTextureLarge from '~/assets/gamestack-login-large.jpg';
-import gamestackTexturePlaceholder from '~/assets/gamestack-login-placeholder.jpg';
-import gamestackTexture from '~/assets/gamestack-login.jpg';
-import sliceTextureLarge from '~/assets/slice-app-large.jpg';
-import sliceTexturePlaceholder from '~/assets/slice-app-placeholder.jpg';
-import sliceTexture from '~/assets/slice-app.jpg';
-import sprTextureLarge from '~/assets/spr-lesson-builder-dark-large.jpg';
-import sprTexturePlaceholder from '~/assets/spr-lesson-builder-dark-placeholder.jpg';
-import sprTexture from '~/assets/spr-lesson-builder-dark.jpg';
+import curalinkTexture from '~/assets/curalink-phone.png';
+import kolinkTexture from '~/assets/kolink-chat.png';
+import panTexture from '~/assets/pan-admin-dashboard.png';
 import { Footer } from '~/components/footer';
 import { baseMeta } from '~/utils/meta';
 import { Intro } from './intro';
 import { Profile } from './profile';
 import { ProjectSummary } from './project-summary';
+import { Skills } from './skills';
+import { Certificates } from './certificates';
 import { useEffect, useRef, useState } from 'react';
 import config from '~/config.json';
 import styles from './home.module.css';
@@ -41,8 +34,8 @@ export const links = () => {
 
 export const meta = () => {
   return baseMeta({
-    title: 'Designer + Developer',
-    description: `Design portfolio of ${config.name} — a product designer working on web & mobile apps with a focus on motion, experience design, and accessibility.`,
+    title: 'Full Stack Developer',
+    description: `Portfolio of ${config.name} — a full stack developer building MERN, Next.js, and Angular products with LLM integration and cloud delivery.`,
   });
 };
 
@@ -53,10 +46,12 @@ export const Home = () => {
   const projectOne = useRef();
   const projectTwo = useRef();
   const projectThree = useRef();
+  const skills = useRef();
+  const certificates = useRef();
   const details = useRef();
 
   useEffect(() => {
-    const sections = [intro, projectOne, projectTwo, projectThree, details];
+    const sections = [intro, projectOne, projectTwo, projectThree, skills, certificates, details];
 
     const sectionObserver = new IntersectionObserver(
       (entries, observer) => {
@@ -103,17 +98,17 @@ export const Home = () => {
         sectionRef={projectOne}
         visible={visibleSections.includes(projectOne.current)}
         index={1}
-        title="Designing the future of education"
-        description="Designing a platform to help educators build better online courseware"
+        title="Kolink Chat"
+        description="Connect every social platform in one place to publish posts and manage chat, DMs, and comments"
         buttonText="View project"
-        buttonLink="/projects/smart-sparrow"
+        buttonLink="https://kolink-chat-landing.vercel.app/"
         model={{
           type: 'laptop',
-          alt: 'Smart Sparrow lesson builder',
+          alt: 'Kolink Chat workspace for posts, DMs, and comments',
           textures: [
             {
-              srcSet: `${sprTexture} 1280w, ${sprTextureLarge} 2560w`,
-              placeholder: sprTexturePlaceholder,
+              srcSet: `${kolinkTexture} 1280w`,
+              placeholder: kolinkTexture,
             },
           ],
         }}
@@ -124,21 +119,21 @@ export const Home = () => {
         sectionRef={projectTwo}
         visible={visibleSections.includes(projectTwo.current)}
         index={2}
-        title="Video game progress tracking"
-        description="Design and development for a video game tracking app built in React Native"
-        buttonText="View website"
-        buttonLink="https://gamestack.Christianw.com"
+        title="CuraLink AI Research"
+        description="Ask a clinical question and CuraLink searches the studies behind every answer"
+        buttonText="View project"
+        buttonLink="https://curalink-ai-research.vercel.app/"
         model={{
           type: 'phone',
-          alt: 'App login screen',
+          alt: 'CuraLink AI research session',
           textures: [
             {
-              srcSet: `${gamestackTexture} 375w, ${gamestackTextureLarge} 750w`,
-              placeholder: gamestackTexturePlaceholder,
+              srcSet: `${curalinkTexture} 1280w`,
+              placeholder: curalinkTexture,
             },
             {
-              srcSet: `${gamestackTexture2} 375w, ${gamestackTexture2Large} 750w`,
-              placeholder: gamestackTexture2Placeholder,
+              srcSet: `${curalinkTexture} 1280w`,
+              placeholder: curalinkTexture,
             },
           ],
         }}
@@ -148,20 +143,30 @@ export const Home = () => {
         sectionRef={projectThree}
         visible={visibleSections.includes(projectThree.current)}
         index={3}
-        title="Biomedical image collaboration"
-        description="Increasing the amount of collaboration in Slice, an app for biomedical imaging"
+        title="PAN admin dashboard"
+        description="An admin and payments platform built with Next.js, MongoDB, and Stripe"
         buttonText="View project"
-        buttonLink="/projects/slice"
+        buttonLink="https://admin.panglobal.network"
         model={{
           type: 'laptop',
-          alt: 'Annotating a biomedical image in the Slice app',
+          alt: 'PAN admin dashboard',
           textures: [
             {
-              srcSet: `${sliceTexture} 800w, ${sliceTextureLarge} 1920w`,
-              placeholder: sliceTexturePlaceholder,
+              srcSet: `${panTexture} 1280w`,
+              placeholder: panTexture,
             },
           ],
         }}
+      />
+      <Skills
+        id="skills"
+        sectionRef={skills}
+        visible={visibleSections.includes(skills.current)}
+      />
+      <Certificates
+        id="certificates"
+        sectionRef={certificates}
+        visible={visibleSections.includes(certificates.current)}
       />
       <Profile
         sectionRef={details}

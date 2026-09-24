@@ -29,6 +29,45 @@ export const Navbar = () => {
     setCurrent(`${location.pathname}${location.hash}`);
   }, [location]);
 
+  // Highlight the nav item for the section currently on screen
+  useEffect(() => {
+    if (location.pathname !== '/') return;
+
+    const sectionToNav = {
+      'project-1': '/#project-1',
+      'project-2': '/#project-1',
+      'project-3': '/#project-1',
+      skills: '/#skills',
+      certificates: '/certificates',
+      details: '/#details',
+    };
+
+    const sections = Object.keys(sectionToNav)
+      .map(id => document.getElementById(id))
+      .filter(Boolean);
+
+    if (!sections.length) return;
+
+    const observer = new IntersectionObserver(
+      entries => {
+        const visible = entries
+          .filter(entry => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+
+        if (!visible) return;
+        setCurrent(sectionToNav[visible.target.id]);
+      },
+      {
+        rootMargin: '-45% 0px -45% 0px',
+        threshold: [0, 0.25, 0.5, 1],
+      }
+    );
+
+    sections.forEach(section => observer.observe(section));
+
+    return () => observer.disconnect();
+  }, [location.pathname]);
+
   // Handle smooth scroll nav items
   useEffect(() => {
     if (!target || location.pathname !== '/') return;
@@ -123,6 +162,13 @@ export const Navbar = () => {
     return '';
   };
 
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? 'hidden' : '';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [menuOpen]);
+
   // Store the current hash to scroll to
   const handleNavItemClick = event => {
     const hash = event.currentTarget.href.split('#')[1];
@@ -175,27 +221,41 @@ export const Navbar = () => {
       <Transition unmount in={menuOpen} timeout={msToNum(tokens.base.durationL)}>
         {({ visible, nodeRef }) => (
           <nav className={styles.mobileNav} data-visible={visible} ref={nodeRef}>
-            {navLinks.map(({ label, pathname }, index) => (
-              <RouterLink
-                unstable_viewTransition
-                prefetch="intent"
-                to={pathname}
-                key={label}
-                className={styles.mobileNavLink}
-                data-visible={visible}
-                aria-current={getCurrent(pathname)}
-                onClick={handleMobileNavClick}
-                style={cssProps({
-                  transitionDelay: numToMs(
-                    Number(msToNum(tokens.base.durationS)) + index * 50
-                  ),
-                })}
-              >
-                {label}
-              </RouterLink>
-            ))}
-            <NavbarIcons />
-            <ThemeToggle isMobile />
+            <button
+              className={styles.backdrop}
+              aria-label="Close menu"
+              onClick={() => setMenuOpen(false)}
+              tabIndex={visible ? 0 : -1}
+            />
+            <div className={styles.panel}>
+              <p className={styles.panelLabel}>Menu</p>
+              {navLinks.map(({ label, pathname }, index) => (
+                <RouterLink
+                  unstable_viewTransition
+                  prefetch="intent"
+                  to={pathname}
+                  key={label}
+                  className={styles.mobileNavLink}
+                  data-visible={visible}
+                  aria-current={getCurrent(pathname)}
+                  onClick={handleMobileNavClick}
+                  style={cssProps({
+                    transitionDelay: numToMs(
+                      Number(msToNum(tokens.base.durationS)) + index * 50
+                    ),
+                  })}
+                >
+                  <span className={styles.mobileNavIndex}>
+                    {String(index + 1).padStart(2, '0')}
+                  </span>
+                  {label}
+                </RouterLink>
+              ))}
+              <div className={styles.panelFooter}>
+                <NavbarIcons />
+                <ThemeToggle isMobile />
+              </div>
+            </div>
           </nav>
         )}
       </Transition>
@@ -216,7 +276,11 @@ const NavbarIcons = ({ desktop }) => (
         target="_blank"
         rel="noopener noreferrer"
       >
-        <Icon className={styles.navIcon} icon={icon} />
+        <Icon
+          className={icon === 'github' ? styles.navIconGithub : styles.navIcon}
+          icon={icon}
+          size={icon === 'github' ? 22 : 16}
+        />
       </a>
     ))}
   </div>

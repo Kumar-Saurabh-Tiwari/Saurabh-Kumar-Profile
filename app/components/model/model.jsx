@@ -245,33 +245,32 @@ export const Model = ({
   }, []);
 
   // Handle render passes for a single frame
-  const renderFrame = useCallback(() => {
-    const blurAmount = 5;
+  const renderFrame = useCallback((updateShadows = true) => {
+    if (updateShadows) {
+      const blurAmount = 5;
 
-    // Remove the background
-    const initialBackground = scene.current.background;
-    scene.current.background = null;
+      // Remove the background
+      const initialBackground = scene.current.background;
+      scene.current.background = null;
 
-    // Force the depthMaterial to everything
-    // cameraHelper.visible = false;
-    scene.current.overrideMaterial = depthMaterial.current;
+      // Force the depthMaterial to everything
+      scene.current.overrideMaterial = depthMaterial.current;
 
-    // Render to the render target to get the depths
-    renderer.current.setRenderTarget(renderTarget.current);
-    renderer.current.render(scene.current, shadowCamera.current);
+      // Render to the render target to get the depths
+      renderer.current.setRenderTarget(renderTarget.current);
+      renderer.current.render(scene.current, shadowCamera.current);
 
-    // And reset the override material
-    scene.current.overrideMaterial = null;
+      // And reset the override material
+      scene.current.overrideMaterial = null;
 
-    blurShadow(blurAmount);
+      blurShadow(blurAmount);
 
-    // A second pass to reduce the artifacts
-    // (0.4 is the minimum blur amout so that the artifacts are gone)
-    blurShadow(blurAmount * 0.4);
+      // A second pass to reduce the artifacts
+      blurShadow(blurAmount * 0.4);
 
-    // Reset and render the normal scene
-    renderer.current.setRenderTarget(null);
-    scene.current.background = initialBackground;
+      renderer.current.setRenderTarget(null);
+      scene.current.background = initialBackground;
+    }
 
     modelGroup.current.rotation.x = rotationX.get();
     modelGroup.current.rotation.y = rotationY.get();
@@ -408,9 +407,19 @@ const Device = ({
           placeholderScreen.current.material = node.material.clone();
           node.parent.add(placeholderScreen.current);
           placeholderScreen.current.material.opacity = 1;
-          placeholderScreen.current.position.z += 0.001;
+          placeholderScreen.current.material.depthWrite = false;
+          placeholderScreen.current.material.polygonOffset = true;
+          placeholderScreen.current.material.polygonOffsetFactor = -4;
+          placeholderScreen.current.material.polygonOffsetUnits = -4;
+          placeholderScreen.current.renderOrder = 2;
 
           applyScreenTexture(placeholder, placeholderScreen.current);
+
+          const clearPlaceholder = () => {
+            if (!placeholderScreen.current) return;
+            placeholderScreen.current.material.opacity = 0;
+            placeholderScreen.current.visible = false;
+          };
 
           loadFullResTexture = async () => {
             const image = await resolveSrcFromSrcSet(texture);
@@ -418,8 +427,15 @@ const Device = ({
             await applyScreenTexture(fullSize, node);
 
             animate(1, 0, {
+              type: 'spring',
+              stiffness: 40,
+              damping: 20,
+              restSpeed: 0.01,
+              restDelta: 0.01,
               onUpdate: value => {
+                if (!placeholderScreen.current) return;
                 placeholderScreen.current.material.opacity = value;
+                if (value < 0.02) clearPlaceholder();
                 renderFrame();
               },
             });

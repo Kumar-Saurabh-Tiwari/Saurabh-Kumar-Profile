@@ -2,38 +2,40 @@ import { Button } from '~/components/button';
 import { DecoderText } from '~/components/decoder-text';
 import { Divider } from '~/components/divider';
 import { Heading } from '~/components/heading';
-import { Link } from '~/components/link';
 import { Section } from '~/components/section';
 import { Text } from '~/components/text';
 import { Transition } from '~/components/transition';
 import { Fragment, useState } from 'react';
-import styles from './profile.module.css';
+import styles from './skills.module.css';
 
-const ProfileText = ({ visible, titleId }) => (
+const CertificatesText = ({ visible, titleId }) => (
   <Fragment>
     <Heading className={styles.title} data-visible={visible} level={3} id={titleId}>
-      <DecoderText text="Hi there" start={visible} delay={500} />
+      <DecoderText text="Certificates" start={visible} delay={500} />
     </Heading>
     <Text className={styles.description} data-visible={visible} size="l" as="p">
-      I’m Saurabh, a full stack developer building scalable web apps with the MERN stack,
-      Angular, and Next.js. The work includes B2B progressive web apps, membership
-      platforms, and real-time chat.
+      Formal training alongside the production work: full-stack engineering, front-end,
+      cloud, and generative AI.
     </Text>
-    <Text className={styles.description} data-visible={visible} size="l" as="p">
-      I also ship LLM features with OpenAI, Groq, and Ollama, then deploy them on AWS and
-      Azure with Docker and CI. The stack is in the <Link href="/#skills">skills section</Link>
-      . If you have a product to build, feel free to drop me a line.
-    </Text>
+    <Button
+      secondary
+      className={styles.button}
+      data-visible={visible}
+      href="/certificates"
+      icon="chevron-right"
+    >
+      View certificates
+    </Button>
   </Fragment>
 );
 
-export const Profile = ({ id, visible, sectionRef }) => {
+export const Certificates = ({ id, visible, sectionRef }) => {
   const [focused, setFocused] = useState(false);
   const titleId = `${id}-title`;
 
   return (
     <Section
-      className={styles.profile}
+      className={styles.skills}
       onFocus={() => setFocused(true)}
       onBlur={() => setFocused(false)}
       as="section"
@@ -54,19 +56,10 @@ export const Profile = ({ id, visible, sectionRef }) => {
                   collapseDelay={1000}
                 />
                 <div className={styles.tagText} data-visible={visible}>
-                  About me
+                  Credentials
                 </div>
               </div>
-              <ProfileText visible={visible} titleId={titleId} />
-              <Button
-                secondary
-                className={styles.button}
-                data-visible={visible}
-                href="/contact"
-                icon="send"
-              >
-                Send me a message
-              </Button>
+              <CertificatesText visible={visible} titleId={titleId} />
             </div>
           </div>
         )}

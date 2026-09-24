@@ -58,5 +58,49 @@
   "bluesky": {
     "width": 24,
     "height": 24
+  },
+  "linkedin": {
+    "width": 24,
+    "height": 24
+  },
+  "x": {
+    "width": 24,
+    "height": 24
+  },
+  "instagram": {
+    "width": 24,
+    "height": 24
+  },
+  "openai": {
+    "width": 24,
+    "height": 24
+  },
+  "groq": {
+    "width": 24,
+    "height": 24
+  },
+  "ollama": {
+    "width": 24,
+    "height": 24
+  },
+  "claude": {
+    "width": 24,
+    "height": 24
+  },
+  "gemini": {
+    "width": 24,
+    "height": 24
+  },
+  "cursor": {
+    "width": 24,
+    "height": 24
+  },
+  "copilot": {
+    "width": 24,
+    "height": 24
+  },
+  "perplexity": {
+    "width": 24,
+    "height": 24
   }
 }

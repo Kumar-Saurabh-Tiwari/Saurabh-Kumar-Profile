@@ -9,18 +9,14 @@ and graphic assets behind this site humanstxt.org.
 _______________________________________________________________________________
 
 
-DESIGNER | Designer
+DEVELOPER | Developer
 
-Christian Bale
-Hand crafted design & web development
+Saurabh Kumar
+Full stack development — MERN, Next.js, Angular, and LLM products
 
-Design tools:
-Figma
-Photoshop
-Blender
-
-twitter.com/Christianmw
-github.com/Christianmw
+github.com/Kumar-Saurabh-Tiwari
+linkedin.com/in/saurabh-tiwari11
+x.com/SaurabhKumar_11
 
 _______________________________________________________________________________
 

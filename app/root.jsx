@@ -9,7 +9,7 @@ import {
   useNavigation,
   useRouteError,
 } from '@remix-run/react';
-import { createCookieSessionStorage, json } from '@remix-run/cloudflare';
+import { createCookieSessionStorage, json } from '@remix-run/node';
 import { ThemeProvider, themeStyles } from '~/components/theme-provider';
 import GothamBook from '~/assets/fonts/gotham-book.woff2';
 import GothamMedium from '~/assets/fonts/gotham-medium.woff2';
@@ -46,7 +46,7 @@ export const links = () => [
   { rel: 'author', href: '/humans.txt', type: 'text/plain' },
 ];
 
-export const loader = async ({ request, context }) => {
+export const loader = async ({ request }) => {
   const { url } = request;
   const { pathname } = new URL(url);
   const pathnameSliced = pathname.endsWith('/') ? pathname.slice(0, -1) : url;
@@ -59,26 +59,35 @@ export const loader = async ({ request, context }) => {
       maxAge: 604_800,
       path: '/',
       sameSite: 'lax',
-      secrets: [context.cloudflare.env.SESSION_SECRET || ' '],
-      secure: true,
+      secrets: [process.env.SESSION_SECRET || 'skumar-portfolio-session'],
+      secure: process.env.NODE_ENV === 'production',
     },
   });
 
   const session = await getSession(request.headers.get('Cookie'));
-  const theme = session.get('theme') || 'dark';
+  const savedTheme = session.get('theme');
+  const systemTheme = request.headers.get('sec-ch-prefers-color-scheme');
+  const theme =
+    savedTheme === 'light' || savedTheme === 'dark'
+      ? savedTheme
+      : systemTheme === 'light'
+        ? 'light'
+        : 'dark';
 
   return json(
-    { canonicalUrl, theme },
+    { canonicalUrl, theme, themeChosen: savedTheme === 'light' || savedTheme === 'dark' },
     {
       headers: {
         'Set-Cookie': await commitSession(session),
+        'Accept-CH': 'Sec-CH-Prefers-Color-Scheme',
+        Vary: 'Sec-CH-Prefers-Color-Scheme',
       },
     }
   );
 };
 
 export default function App() {
-  let { canonicalUrl, theme } = useLoaderData();
+  let { canonicalUrl, theme, themeChosen } = useLoaderData();
   const fetcher = useFetcher();
   const { state } = useNavigation();
 
@@ -117,6 +126,14 @@ export default function App() {
         <link rel="canonical" href={canonicalUrl} />
       </head>
       <body data-theme={theme}>
+        {!themeChosen && (
+          <script
+            dangerouslySetInnerHTML={{
+              __html:
+                "document.body.dataset.theme=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'",
+            }}
+          />
+        )}
         <ThemeProvider theme={theme} toggleTheme={toggleTheme}>
           <Progress />
           <VisuallyHidden showOnFocus as="a" className={styles.skip} href="#main-content">
